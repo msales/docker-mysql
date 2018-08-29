@@ -29,6 +29,8 @@ Note that this image is emphemeral by default and you have to provide persistent
 
 ## Msales features - ramdisk
 
+Warning: SYS_ADMIN capability is required for this mode of operation
+
 As mentioned above, our implementation adds following enviroment variables for enabling ramdrive operations:
 
 ```
