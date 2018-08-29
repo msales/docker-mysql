@@ -7,6 +7,14 @@ https://hub.docker.com/r/library/mysql/
 
 Since our image extends features provided by official image we encourage you to read official docs before reading this readme.
 
+## Tagging schema
+
+We are reusing mysql version from official image tag. To mark our own versions we append "-msales_build" suffix f.e. :
+
+```
+mysql:5.7.23-123
+```
+
 ## Base Features
 
 ### Classic usage
