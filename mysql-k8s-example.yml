@@ -1,0 +1,76 @@
+---
+apiVersion: v1
+kind: List
+items:
+
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: mysql
+    namespace: msales-dev
+  spec:
+    accessModes:
+      - ReadWriteOnce
+    volumeMode: Filesystem
+    resources:
+      requests:
+        storage: 1Gi
+
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    annotations:
+    labels:
+      app: mysql
+    name: mysql
+    namespace: msales-dev
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: mysql
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: mysql
+      spec:
+        containers:
+        - image: msales/mysql:latest
+          imagePullPolicy: IfNotPresent
+          name: mysql
+          env:
+            - name: "MYSQL_ALLOW_EMPTY_PASSWORD"
+              value: "true"
+            - name: "RAMDISK_SIZE"
+              value: "1024"
+          ports:
+          - containerPort: 3306
+            protocol: TCP
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 2048Mi
+            requests:
+              cpu: 100m
+              memory: 100Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          securityContext:
+            capabilities:
+              add: ["SYS_ADMIN"]
+          volumeMounts:
+            - name: mysql
+              mountPath: /var/lib/mysql
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        terminationGracePeriodSeconds: 90
+        volumes:
+        - name: mysql
+          persistentVolumeClaim:
+            claimName: mysql
