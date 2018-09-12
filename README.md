@@ -1,4 +1,4 @@
-# msales/mysql - Oficial mysql image with ramdisk support
+# msales/mysql - Official mysql image with ramdisk support
 
 ## Description
 
